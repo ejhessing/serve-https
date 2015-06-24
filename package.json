@@ -1,0 +1,44 @@
+{
+  "name": "https-server",
+  "version": "1.0.0",
+  "description": "Serves HTTPS using TLS (SSL) certs for localhost.daplie.com - great for testing and development.",
+  "main": "serve.js",
+  "scripts": {
+    "test": "node serve.js -p 1443 -d /tmp/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daplie/localhost.daplie.com-server.git"
+  },
+  "keywords": [
+    "https",
+    "local",
+    "localhost",
+    "development",
+    "dev",
+    "tls",
+    "ssl",
+    "cert",
+    "certs",
+    "certificate",
+    "certificates",
+    "http",
+    "express",
+    "connect",
+    "serve",
+    "server"
+  ],
+  "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Daplie/localhost.daplie.com-server/issues"
+  },
+  "homepage": "https://github.com/Daplie/localhost.daplie.com-server#readme",
+  "dependencies": {
+    "finalhandler": "^0.4.0",
+    "localhost.daplie.com-certificates": "^1.0.0",
+    "minimist": "^1.1.1",
+    "serve-index": "^1.7.0",
+    "serve-static": "^1.10.0"
+  }
+}
