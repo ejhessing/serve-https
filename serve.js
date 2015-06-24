@@ -1,3 +1,4 @@
+#!/bin/bash
 'use strict';
 
 var https = require('https');

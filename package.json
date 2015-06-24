@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node serve.js -p 1443 -d /tmp/"
   },
+  "bin": {
+    "serve-https": "serve.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Daplie/localhost.daplie.com-server.git"
