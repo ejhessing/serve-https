@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env node
 'use strict';
 
 var https = require('https');
