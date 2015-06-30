@@ -4,9 +4,11 @@
 var https = require('https');
 var path = require('path');
 
-function createServer(port, pubdir) {
-  var server = https.createServer(require('localhost.daplie.com-certificates'));
+function createServer(port, pubdir, content) {
+  var options = require('localhost.daplie.com-certificates');
+  var server = https.createServer(options);
   var app = require('./app');
+  var directive = { public: pubdir, content: content };
 
   server.on('error', function (err) {
     console.error(err);
@@ -19,13 +21,13 @@ function createServer(port, pubdir) {
     if (443 !== p) {
       msg += ':' + p;
     }
-    console.log(msg);
+    console.info(msg);
   });
 
   if ('function' === typeof app) {
-    app = app({ public: pubdir });
+    app = app(directive);
   } else if ('function' === typeof app.create) {
-    app = app.create({ public: pubdir });
+    app = app.create(directive);
   }
 
   Promise.resolve(app).then(function (app) {
@@ -40,7 +42,8 @@ function run() {
   var argv = minimist(process.argv.slice(2));
   var port = argv.p || argv._[0] || 1443;
   var pubdir = path.resolve(argv.d || argv._[1] || process.cwd());
-  createServer(port, pubdir);
+  var content = argv.c;
+  createServer(port, pubdir, content);
 }
 
 if (require.main === module) {
