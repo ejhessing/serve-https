@@ -70,6 +70,7 @@ function run() {
   var port = argv.p || argv.port || argv._[0] || 8443;
   var pubdir = path.resolve(argv.d || argv._[1] || process.cwd());
   var content = argv.c;
+  var letsencryptHost = argv['letsencrypt-certs'];
 
   var cert = require('localhost.daplie.com-certificates');
   var opts = {
@@ -82,7 +83,14 @@ function run() {
     }
   };
 
-  if (argv.key || argv.cert || argv.chain) {
+  if (letsencryptHost) {
+    argv.key = argv.key || '/etc/letsencrypt/live/' + letsencryptHost + '/privkey.pem';
+    argv.cert = argv.cert || '/etc/letsencrypt/live/' + letsencryptHost + '/cert.pem';
+    argv.chain = argv.chain || '/etc/letsencrypt/live/' + letsencryptHost + '/chain.pem';
+    argv.servername = argv.servername || letsencryptHost;
+  }
+
+  if (argv.key || argv.cert || argv.chain || argv['serve-chain']) {
     if (!argv.key || !argv.cert || !argv.chain) {
       console.error("You must specify each of --key --cert and --chain (chain may be empty)");
       return;
@@ -104,6 +112,10 @@ function run() {
         return (ca + '-----END CERTIFICATE-----').trim();
       }));
     }, []);
+
+    if (argv['serve-chain']) {
+      content = opts.ca.join('\r\n');
+    }
   }
 
   opts.servername = 'localhost.daplie.com';

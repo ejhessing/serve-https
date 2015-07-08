@@ -69,12 +69,23 @@ If you want to quickly test the certificates you installed,
 you can do so like this:
 
 ```bash
-serve-https -p 8443 \
+sudo serve-https -p 8443 \
+  --letsencrypt-certs test.mooo.com \
+  --serve-chain true
+```
+
+which is equilavent to
+
+```bash
+sudo serve-https -p 8443 \
+  --servername test.mooo.com
   --key /etc/letsencrypt/live/test.mooo.com/privkey.pem \
   --cert /etc/letsencrypt/live/test.mooo.com/cert.pem \
   --chain /etc/letsencrypt/live/test.mooo.com/chain.pem \
-  -c "$(cat '/etc/letsencrypt/live/test.mooo.com/chain.pem')"
+  -c "$(cat 'sudo /etc/letsencrypt/live/test.mooo.com/chain.pem')"
 ```
+
+and can be tested like so
 
 ```bash
 curl --insecure https://test.mooo.com:8443 > ./chain.pem
