@@ -60,8 +60,9 @@ it would redirect to <https://localhost.daplie.com:3443>.
 
 ### Testing ACME Let's Encrypt certs
 
-You can get free https certificates from letsencrypt.org (ACME letsencrypt)
-and even a free domain from https://freedns.afraid.org.
+You can get free https certificates from [letsencrypt.org](https://letsencrypt.org)
+(ACME letsencrypt)
+and even a free subdomain from <https://freedns.afraid.org>.
 
 ```bash
 serve-https -p 8443 \
