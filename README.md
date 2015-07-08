@@ -1,9 +1,10 @@
 serve-https
 ===========
 
-Serves HTTPS using TLS (SSL) certs.
+A simple HTTPS static file server with valid TLS (SSL) certs.
 
-Bundles a valid certificate for localhost.daplie.com - great for testing and development.
+Comes bundled a valid certificate for localhost.daplie.com,
+which is great for testing and development, and you can specify your own.
 
 Also great for testing ACME certs from letsencrypt.org.
 
@@ -29,11 +30,21 @@ Usage
 
 Specifying a custom HTTPS certificate:
 
-* `--key /path/to/privkey.pem`
-* `--cert /path/to/cert.pem`
-* `--chain /path/to/chain.pem`
+* `--key /path/to/privkey.pem` specifies the server private key
+* `--cert /path/to/cert.pem` specifies the server certificate
+* `--chain /path/to/chain.pem` specifies the certificate authorities
 
-Note: you may specify a file containing all certificate authorities or use even `--chain` multiple times such as `--chain /path/to/intermediate-ca-1.pem --chain /path/to/intermediate-ca-2.pem`
+Note: `--chain` may specify single cert, a bundle, and may be used multiple times like so:
+
+```
+--chain /path/to/intermediate-ca-1.pem --chain /path/to/intermediate-ca-2.pem
+```
+
+Other options:
+
+* `--serve-chain true` alias for `-c` with the contents of chain.pem
+* `--servername example.com` changes the servername logged to the console
+* `--letsencrypt-certs example.com` sets and key, cert, and chain to standard letsencrypt locations
 
 Examples
 --------
