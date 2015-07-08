@@ -16,16 +16,16 @@ serve-https
 ```
 
 ```
-Serving /Users/foo/ at https://localhost.daplie.com:1443
+Serving /Users/foo/ at https://localhost.daplie.com:8443
 ```
 
 Usage
 -----
 
-* `-p <port>` - i.e. `sudo serve-https -p 443`
-* `-d <dirpath>` - i.e. `serve-https -d /tmp/`
-* `-c <content>` - i.e. `server-https -c 'Hello, World! '`
-* `--insecure-port <port>` - run an http server that redirects to https
+* `-p <port>` - i.e. `sudo serve-https -p 443` (defaults to 8443)
+* `-d <dirpath>` - i.e. `serve-https -d /tmp/` (defaults to `pwd`)
+* `-c <content>` - i.e. `server-https -c 'Hello, World! '` (defaults to directory index)
+* `--insecure-port <port>` - run an http server that redirects to https (off by default)
 
 Specifying a custom HTTPS certificate:
 

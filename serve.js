@@ -67,7 +67,7 @@ module.exports.createServer = createServer;
 function run() {
   var minimist = require('minimist');
   var argv = minimist(process.argv.slice(2));
-  var port = argv.p || argv.port || argv._[0] || 1443;
+  var port = argv.p || argv.port || argv._[0] || 8443;
   var pubdir = path.resolve(argv.d || argv._[1] || process.cwd());
   var content = argv.c;
 
