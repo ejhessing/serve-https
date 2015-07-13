@@ -76,35 +76,47 @@ function run() {
   var opts = {
     key: cert.key
   , cert: cert.cert
-  , ca: cert.ca
+  //, ca: cert.ca
   , SNICallback: function (servername, cb) {
       cb(null, require('tls').createSecureContext(opts));
       return;
     }
   };
+  var peerCa;
 
   if (letsencryptHost) {
     argv.key = argv.key || '/etc/letsencrypt/live/' + letsencryptHost + '/privkey.pem';
-    argv.cert = argv.cert || '/etc/letsencrypt/live/' + letsencryptHost + '/cert.pem';
-    argv.chain = argv.chain || '/etc/letsencrypt/live/' + letsencryptHost + '/chain.pem';
+    argv.cert = argv.cert || '/etc/letsencrypt/live/' + letsencryptHost + '/fullchain.pem';
+    argv.root = argv.root || argv.chain || '/etc/letsencrypt/live/' + letsencryptHost + '/root.pem';
     argv.servername = argv.servername || letsencryptHost;
+    argv['serve-root'] = argv['serve-root'] || argv['serve-chain'];
   }
 
-  if (argv.key || argv.cert || argv.chain || argv['serve-chain']) {
-    if (!argv.key || !argv.cert || !argv.chain) {
-      console.error("You must specify each of --key --cert and --chain (chain may be empty)");
+  if (argv['serve-root'] && !argv.root) {
+    console.error("You must specify bath --root to use --serve-root");
+    return;
+  }
+
+  if (argv.key || argv.cert || argv.root) {
+    if (!argv.key || !argv.cert) {
+      console.error("You must specify bath --key and --cert, and optionally --root (required with serve-root)");
       return;
     }
 
-    if (!Array.isArray(argv.chain)) {
-      argv.chain = [argv.chain];
+    if (!Array.isArray(argv.root)) {
+      argv.root = [argv.root];
     }
 
     opts.key = fs.readFileSync(argv.key);
     opts.cert = fs.readFileSync(argv.cert);
+
     // turn multiple-cert pemfile into array of cert strings
-    opts.ca = argv.chain.reduce(function (chain, fullpath) {
-      return chain.concat(fs.readFileSync(fullpath, 'ascii')
+    peerCa = argv.root.reduce(function (roots, fullpath) {
+      if (!fs.existsSync(fullpath)) {
+        return roots;
+      }
+
+      return roots.concat(fs.readFileSync(fullpath, 'ascii')
       .split('-----END CERTIFICATE-----')
       .filter(function (ca) {
         return ca.trim();
@@ -113,8 +125,15 @@ function run() {
       }));
     }, []);
 
-    if (argv['serve-chain']) {
+    if (argv['serve-root']) {
       content = opts.ca.join('\r\n');
+    }
+
+    // TODO * `--verify /path/to/root.pem` require peers to present certificates from said authority
+    if (argv.verify) {
+      opts.ca = peerCa;
+      opts.requestCert = true;
+      opts.rejectUnauthorized = true;
     }
   }
 

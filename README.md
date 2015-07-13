@@ -31,20 +31,20 @@ Usage
 Specifying a custom HTTPS certificate:
 
 * `--key /path/to/privkey.pem` specifies the server private key
-* `--cert /path/to/cert.pem` specifies the server certificate
-* `--chain /path/to/chain.pem` specifies the certificate authorities
+* `--cert /path/to/fullchain.pem` specifies the bundle of server certificate and all intermediate certificates
+* `--root /path/to/root.pem` specifies the certificate authority(ies)
 
-Note: `--chain` may specify single cert, a bundle, and may be used multiple times like so:
+Note: `--root` may specify single cert or a bundle, and may be used multiple times like so:
 
 ```
---chain /path/to/intermediate-ca-1.pem --chain /path/to/intermediate-ca-2.pem
+--root /path/to/primary-root.pem --root /path/to/cross-root.pem
 ```
 
 Other options:
 
-* `--serve-chain true` alias for `-c` with the contents of chain.pem
+* `--serve-root true` alias for `-c` with the contents of root.pem
 * `--servername example.com` changes the servername logged to the console
-* `--letsencrypt-certs example.com` sets and key, cert, and chain to standard letsencrypt locations
+* `--letsencrypt-certs example.com` sets and key, fullchain, and root to standard letsencrypt locations
 
 Examples
 --------
@@ -82,7 +82,7 @@ you can do so like this:
 ```bash
 sudo serve-https -p 8443 \
   --letsencrypt-certs test.mooo.com \
-  --serve-chain true
+  --serve-root true
 ```
 
 which is equilavent to
@@ -91,16 +91,16 @@ which is equilavent to
 sudo serve-https -p 8443 \
   --servername test.mooo.com
   --key /etc/letsencrypt/live/test.mooo.com/privkey.pem \
-  --cert /etc/letsencrypt/live/test.mooo.com/cert.pem \
-  --chain /etc/letsencrypt/live/test.mooo.com/chain.pem \
-  -c "$(cat 'sudo /etc/letsencrypt/live/test.mooo.com/chain.pem')"
+  --cert /etc/letsencrypt/live/test.mooo.com/fullchain.pem \
+  --root /etc/letsencrypt/live/test.mooo.com/root.pem \
+  -c "$(cat 'sudo /etc/letsencrypt/live/test.mooo.com/root.pem')"
 ```
 
 and can be tested like so
 
 ```bash
-curl --insecure https://test.mooo.com:8443 > ./chain.pem
-curl https://test.mooo.com:8843 --cacert ./chain.pem
+curl --insecure https://test.mooo.com:8443 > ./root.pem
+curl https://test.mooo.com:8843 --cacert ./root.pem
 ```
 
 * [QuickStart Guide for Let's Encrypt](https://coolaj86.com/articles/lets-encrypt-on-raspberry-pi/)
