@@ -31,7 +31,12 @@ function createInsecureServer(port, pubdir, opts) {
 function createServer(port, pubdir, content, opts) {
   var server = https.createServer(opts);
   var app = require('./app');
-  var directive = { public: pubdir, content: content };
+
+  var directive = { public: pubdir, content: content, livereload: opts.livereload, servername: opts.servername };
+  var livereload = require('livereload');
+  var server2 = livereload.createServer({ https: opts });
+
+  server2.watch(pubdir);
 
   if (opts.insecurePort) {
     createInsecureServer(port, pubdir, opts);
@@ -68,6 +73,7 @@ function run() {
   var minimist = require('minimist');
   var argv = minimist(process.argv.slice(2));
   var port = argv.p || argv.port || argv._[0] || 8443;
+  var livereload = argv.livereload;
   var pubdir = path.resolve(argv.d || argv._[1] || process.cwd());
   var content = argv.c;
   var letsencryptHost = argv['letsencrypt-certs'];
@@ -142,6 +148,7 @@ function run() {
     opts.servername = argv.servername;
   }
   opts.insecurePort = argv.i || argv['insecure-port'];
+  opts.livereload = livereload;
 
   createServer(port, pubdir, content, opts);
 }

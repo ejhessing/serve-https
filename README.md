@@ -26,6 +26,7 @@ Usage
 * `-p <port>` - i.e. `sudo serve-https -p 443` (defaults to 8443)
 * `-d <dirpath>` - i.e. `serve-https -d /tmp/` (defaults to `pwd`)
 * `-c <content>` - i.e. `server-https -c 'Hello, World! '` (defaults to directory index)
+* `--livereload` - inject livereload into all html pages
 * `--insecure-port <port>` - run an http server that redirects to https (off by default)
 
 Specifying a custom HTTPS certificate:

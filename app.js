@@ -15,6 +15,40 @@ module.exports = function (opts) {
       return;
     }
     var done = finalhandler(req, res);
+    var livereload = '';
+    var addLen = 0;
+
+    if (opts.livereload) {
+      livereload = '<script src="//'
+        + (res.getHeader('Host') || opts.servername).split(':')[0]
+        + ':35729/livereload.js?snipver=1"></script>';
+      addLen = livereload.length;
+    }
+
+    res.__end = res.end;
+    res.__write = res.write;
+    res.write = function (data, enc, cb) {
+      if (this.headersSent) {
+        return;
+      }
+
+      if (!/html/i.test(this.getHeader('Content-Type'))) {
+        this.__write(data, enc, cb);
+        return;
+      }
+
+      if (this.getHeader('Content-Length')) {
+        this.setHeader('Content-Length', this.getHeader('Content-Length') + addLen);
+      }
+
+      this.__write(livereload);
+      this.__write(data, enc, cb);
+    };
+    res.end = function () {
+
+
+      res.__end();
+    };
     serve(req, res, function (err) {
       if (err) { return done(err); }
       index(req, res, done);

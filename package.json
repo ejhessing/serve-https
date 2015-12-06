@@ -39,6 +39,7 @@
   "homepage": "https://github.com/Daplie/localhost.daplie.com-server#readme",
   "dependencies": {
     "finalhandler": "^0.4.0",
+    "livereload": "^0.4.0",
     "localhost.daplie.com-certificates": "^1.1.2",
     "minimist": "^1.1.1",
     "redirect-https": "^1.1.0",
