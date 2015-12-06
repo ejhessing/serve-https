@@ -25,10 +25,10 @@ module.exports = function (opts) {
       addLen = livereload.length;
     }
 
-    res.__end = res.end;
     res.__write = res.write;
     res.write = function (data, enc, cb) {
       if (this.headersSent) {
+        this.__write(data, enc, cb);
         return;
       }
 
@@ -43,11 +43,6 @@ module.exports = function (opts) {
 
       this.__write(livereload);
       this.__write(data, enc, cb);
-    };
-    res.end = function () {
-
-
-      res.__end();
     };
     serve(req, res, function (err) {
       if (err) { return done(err); }
