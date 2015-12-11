@@ -93,7 +93,7 @@ function run() {
   if (letsencryptHost) {
     argv.key = argv.key || '/etc/letsencrypt/live/' + letsencryptHost + '/privkey.pem';
     argv.cert = argv.cert || '/etc/letsencrypt/live/' + letsencryptHost + '/fullchain.pem';
-    argv.root = argv.root || argv.chain || '/etc/letsencrypt/live/' + letsencryptHost + '/root.pem';
+    argv.root = argv.root || argv.chain || '';
     argv.servername = argv.servername || letsencryptHost;
     argv['serve-root'] = argv['serve-root'] || argv['serve-chain'];
   }
@@ -131,15 +131,15 @@ function run() {
       }));
     }, []);
 
-    if (argv['serve-root']) {
-      content = opts.ca.join('\r\n');
-    }
-
     // TODO * `--verify /path/to/root.pem` require peers to present certificates from said authority
     if (argv.verify) {
       opts.ca = peerCa;
       opts.requestCert = true;
       opts.rejectUnauthorized = true;
+    }
+
+    if (argv['serve-root']) {
+      content = peerCa.join('\r\n');
     }
   }
 
