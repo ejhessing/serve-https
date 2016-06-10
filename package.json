@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Daplie/localhost.daplie.com-server.git"
+    "url": "git+https://github.com/Daplie/serve-https.git"
   },
   "keywords": [
     "https",
@@ -31,16 +31,16 @@
     "serve",
     "server"
   ],
-  "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com/)",
+  "author": "AJ ONeal <coolaj86@gmail.com> (https://coolaj86.com/)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Daplie/localhost.daplie.com-server/issues"
+    "url": "https://github.com/Daplie/server-https/issues"
   },
-  "homepage": "https://github.com/Daplie/localhost.daplie.com-server#readme",
+  "homepage": "https://github.com/Daplie/serve-https#readme",
   "dependencies": {
     "finalhandler": "^0.4.0",
     "livereload": "^0.4.0",
-    "localhost.daplie.com-certificates": "^1.1.2",
+    "localhost.daplie.com-certificates": "^1.2.0",
     "minimist": "^1.1.1",
     "redirect-https": "^1.1.0",
     "serve-index": "^1.7.0",
