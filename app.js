@@ -44,17 +44,19 @@ module.exports = function (opts) {
       this.__write(livereload);
       this.__write(data, enc, cb);
     };
-    serve(req, res, function (err) {
-      if (err) { return done(err); }
-      index(req, res, function (err) {
+
+    function serveStatic() {
+      serve(req, res, function (err) {
         if (err) { return done(err); }
-        if (opts.expressApp) {
-          opts.expressApp(req, res, done);
-        }
-        else {
-          done();
-        }
+        index(req, res, done);
       });
-    });
+    }
+
+    if (opts.expressApp) {
+      opts.expressApp(req, res, serveStatic);
+    }
+    else {
+      serveStatic();
+    }
   };
 };
