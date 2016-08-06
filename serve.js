@@ -32,7 +32,8 @@ function createServer(port, pubdir, content, opts) {
   var server = https.createServer(opts);
   var app = require('./app');
 
-  var directive = { public: pubdir, content: content, livereload: opts.livereload, servername: opts.servername };
+  var directive = { public: pubdir, content: content, livereload: opts.livereload
+    , servername: opts.servername, expressApp: opts.expressApp };
   var livereload = require('livereload');
   var server2 = livereload.createServer({ https: opts });
 
@@ -48,12 +49,15 @@ function createServer(port, pubdir, content, opts) {
   });
 
   server.listen(port, function () {
-    var msg = 'Serving ' + pubdir + ' at https://' + opts.servername;
+    var msg = 'Serving ' + pubdir + ' at ';
+    var httpsUrl = 'https://' + opts.servername;
     var p = server.address().port;
     if (443 !== p) {
-      msg += ':' + p;
+      httpsUrl += ':' + p;
     }
     console.info(msg);
+    console.info('');
+    console.info('\t' + httpsUrl);
   });
 
   if ('function' === typeof app) {
@@ -62,7 +66,7 @@ function createServer(port, pubdir, content, opts) {
     app = app.create(directive);
   }
 
-  Promise.resolve(app).then(function (app) {
+  return Promise.resolve(app).then(function (app) {
     server.on('request', app);
   });
 }
@@ -96,6 +100,7 @@ function run() {
     argv.root = argv.root || argv.chain || '';
     argv.servername = argv.servername || letsencryptHost;
     argv['serve-root'] = argv['serve-root'] || argv['serve-chain'];
+    // argv[express-app]
   }
 
   if (argv['serve-root'] && !argv.root) {
@@ -149,6 +154,10 @@ function run() {
   }
   opts.insecurePort = argv.i || argv['insecure-port'];
   opts.livereload = livereload;
+
+  if (argv['express-app']) {
+    opts.expressApp = require(path.resolve(process.cwd(), argv['express-app']));
+  }
 
   createServer(port, pubdir, content, opts);
 }

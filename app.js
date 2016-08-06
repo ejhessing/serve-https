@@ -46,7 +46,15 @@ module.exports = function (opts) {
     };
     serve(req, res, function (err) {
       if (err) { return done(err); }
-      index(req, res, done);
+      index(req, res, function (err) {
+        if (err) { return done(err); }
+        if (opts.expressApp) {
+          opts.expressApp(req, res, done);
+        }
+        else {
+          done();
+        }
+      });
     });
   };
 };
