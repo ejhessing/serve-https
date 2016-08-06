@@ -55,9 +55,11 @@ function createServer(port, pubdir, content, opts) {
     if (443 !== p) {
       httpsUrl += ':' + p;
     }
+    console.info('');
     console.info(msg);
     console.info('');
     console.info('\t' + httpsUrl);
+    console.info('');
   });
 
   if ('function' === typeof app) {
