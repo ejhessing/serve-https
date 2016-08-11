@@ -24,7 +24,7 @@ Usage
 -----
 
 * `-p <port>` - i.e. `sudo serve-https -p 443` (defaults to 8443)
-* `-d <dirpath>` - i.e. `serve-https -d /tmp/` (defaults to `pwd`)
+* `-d <dirpath>` - i.e. `serve-https -d /tmp/` (defaults to `process.cwd()`, meaning `pwd`)
 * `-c <content>` - i.e. `serve-https -c 'Hello, World! '` (defaults to directory index)
 * `--express-app` - path to a file the exports an express-style app (`function (req, res, next) { ... }`)
 * `--livereload` - inject livereload into all html pages (see also: [fswatch](http://stackoverflow.com/a/13807906/151312))
